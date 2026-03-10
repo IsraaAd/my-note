@@ -197,6 +197,10 @@ pointer-events:none;z-index:0;}
         <button class="tbb" onclick="fmt('justifyCenter')">⇔</button>
         <button class="tbb" onclick="fmt('justifyLeft')">⇥</button>
         <div class="tsep"></div>
+        <button class="tbb" onclick="changeFontSize(-1)" title="تصغير الخط">ع−</button>
+        <span id="fontSizeLabel" style="font-size:0.8rem;color:var(--text2);min-width:28px;text-align:center;flex-shrink:0">16</span>
+        <button class="tbb" onclick="changeFontSize(1)" title="تكبير الخط">ع+</button>
+        <div class="tsep"></div>
         <div class="clr" style="background:#2d0a1a" onclick="fmt('foreColor','#2d0a1a')"></div>
         <div class="clr" style="background:#d44d8a" onclick="fmt('foreColor','#d44d8a')"></div>
         <div class="clr" style="background:#ff85b8" onclick="fmt('foreColor','#ff85b8')"></div>
@@ -300,6 +304,13 @@ function onSubjectChange(){const n=getNote(activeId);if(!n)return;n.subject=docu
 function onContentChange(){const n=getNote(activeId);if(!n)return;n.content=document.getElementById('ec').innerHTML;n.updatedAt=Date.now();updateStats();scheduleSave();}
 function scheduleSave(){setStat(true);clearTimeout(saveTimer);saveTimer=setTimeout(()=>{save();renderList();setStat(false);},800);}
 function updateStats(){const t=document.getElementById('ec').innerText||'';const w=t.trim()?t.trim().split(/\s+/).length:0;document.getElementById('wc').textContent=w+' كلمة';document.getElementById('cc').textContent=t.length+' حرف';}
+let fontSize=16;
+function changeFontSize(delta){
+  fontSize=Math.min(32,Math.max(11,fontSize+delta));
+  document.getElementById('ec').style.fontSize=fontSize+'px';
+  document.getElementById('fontSizeLabel').textContent=fontSize;
+  localStorage.setItem('mhd_fontsize',fontSize);
+}
 function fmt(cmd,val){document.getElementById('ec').focus();document.execCommand(cmd,false,val||null);onContentChange();}
 function formatBlock(tag){if(!tag)return;document.getElementById('ec').focus();document.execCommand('formatBlock',false,tag);onContentChange();}
 function insertHR(){document.getElementById('ec').focus();document.execCommand('insertHTML',false,'<hr>');onContentChange();}
@@ -314,6 +325,8 @@ function applyLayout(){if(window.innerWidth>=768){document.getElementById('listV
 window.addEventListener('resize',applyLayout);
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openNewModal();}if(e.key==='Escape')closeModal();});
 applyLayout();renderList();
+const savedFs=parseInt(localStorage.getItem('mhd_fontsize')||'16');
+fontSize=savedFs;document.getElementById('ec').style.fontSize=savedFs+'px';document.getElementById('fontSizeLabel').textContent=savedFs;
 if(notes.length>0&&!isMobile())openNote(notes[0].id);
 </script>
 </body>
