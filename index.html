@@ -74,6 +74,11 @@ pointer-events:none;z-index:0;}
 .tsel{background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.85rem;padding:7px 8px;outline:none;flex-shrink:0;}
 .clr{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid rgba(0,0,0,0.08);flex-shrink:0;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
 .clr:active{transform:scale(1.25);}
+.clr.hl{border-radius:6px;width:24px;height:24px;}
+.tb-label{font-size:0.72rem;font-weight:800;color:var(--accent);white-space:nowrap;flex-shrink:0;opacity:0.8;margin-left:2px;}
+.tbb-h1{color:#b03070!important;font-weight:900!important;font-size:1rem!important;}
+.tbb-h2{color:#c0407a!important;font-weight:800!important;}
+.tbb-h3{color:#a03060!important;font-weight:700!important;}
 
 .warea{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--surface);}
 .title-in{background:transparent;border:none;color:var(--text);font-family:'Tajawal',sans-serif;font-size:1.4rem;font-weight:900;padding:18px 20px 8px;width:100%;outline:none;flex-shrink:0;}
@@ -173,40 +178,54 @@ pointer-events:none;z-index:0;}
         <button class="tbi" onclick="exportNote()">⬇️</button>
       </div>
 
+      <!-- شريط الأدوات - صف 1 -->
       <div class="toolbar">
-        <select class="tsel" onchange="formatBlock(this.value);this.value=''">
-          <option value="">الفقرة</option>
-          <option value="p">عادي</option>
-          <option value="h1">عنوان 1</option>
-          <option value="h2">عنوان 2</option>
-          <option value="h3">عنوان 3</option>
-          <option value="blockquote">اقتباس</option>
-        </select>
+        <span class="tb-label">عنوان:</span>
+        <button class="tbb tbb-h1" onclick="formatBlock('h1')">H1</button>
+        <button class="tbb tbb-h2" onclick="formatBlock('h2')">H2</button>
+        <button class="tbb tbb-h3" onclick="formatBlock('h3')">H3</button>
+        <button class="tbb" onclick="formatBlock('p')">عادي</button>
+        <button class="tbb" onclick="formatBlock('blockquote')">❝</button>
         <div class="tsep"></div>
+        <span class="tb-label">تنسيق:</span>
         <button class="tbb" onclick="fmt('bold')"><b>ع</b></button>
         <button class="tbb" onclick="fmt('italic')"><i>ع</i></button>
         <button class="tbb" onclick="fmt('underline')"><u>ع</u></button>
         <button class="tbb" onclick="fmt('strikeThrough')"><s>ع</s></button>
-        <button class="tbb" onclick="fmt('hiliteColor','rgba(212,77,138,0.2)')">🖊</button>
         <div class="tsep"></div>
-        <button class="tbb" onclick="fmt('insertUnorderedList')">• قائمة</button>
-        <button class="tbb" onclick="fmt('insertOrderedList')">١.</button>
-        <button class="tbb" onclick="insertHR()">─</button>
+        <span class="tb-label">حجم النص المحدد:</span>
+        <button class="tbb" onclick="selFontSize(-1)"><b>ع−</b></button>
+        <button class="tbb" onclick="selFontSize(1)"><b>ع+</b></button>
+        <div class="tsep"></div>
+        <span class="tb-label">قوائم:</span>
+        <button class="tbb" onclick="fmt('insertUnorderedList')">• نقاط</button>
+        <button class="tbb" onclick="fmt('insertOrderedList')">١. مرتبة</button>
+        <button class="tbb" onclick="insertHR()">─ فاصل</button>
         <div class="tsep"></div>
         <button class="tbb" onclick="fmt('justifyRight')">⇤</button>
         <button class="tbb" onclick="fmt('justifyCenter')">⇔</button>
         <button class="tbb" onclick="fmt('justifyLeft')">⇥</button>
+      </div>
+      <!-- شريط الأدوات - صف 2: هايلايت + ألوان -->
+      <div class="toolbar" style="border-top:1px solid var(--border)">
+        <span class="tb-label">هايلايت:</span>
+        <div class="clr hl" style="background:#ffe066" title="أصفر" onclick="fmt('hiliteColor','#ffe066')"></div>
+        <div class="clr hl" style="background:#ffb3d1" title="وردي" onclick="fmt('hiliteColor','#ffb3d1')"></div>
+        <div class="clr hl" style="background:#b3f0d1" title="أخضر" onclick="fmt('hiliteColor','#b3f0d1')"></div>
+        <div class="clr hl" style="background:#b3d9ff" title="أزرق" onclick="fmt('hiliteColor','#b3d9ff')"></div>
+        <div class="clr hl" style="background:#e0b3ff" title="بنفسجي" onclick="fmt('hiliteColor','#e0b3ff')"></div>
+        <div class="clr hl" style="background:#ffd9b3" title="برتقالي" onclick="fmt('hiliteColor','#ffd9b3')"></div>
+        <button class="tbb" onclick="fmt('hiliteColor','transparent')" style="font-size:0.75rem;padding:5px 8px">✕ مسح</button>
         <div class="tsep"></div>
-        <button class="tbb" onclick="changeFontSize(-1)" title="تصغير الخط">ع−</button>
-        <span id="fontSizeLabel" style="font-size:0.8rem;color:var(--text2);min-width:28px;text-align:center;flex-shrink:0">16</span>
-        <button class="tbb" onclick="changeFontSize(1)" title="تكبير الخط">ع+</button>
-        <div class="tsep"></div>
+        <span class="tb-label">لون النص:</span>
         <div class="clr" style="background:#2d0a1a" onclick="fmt('foreColor','#2d0a1a')"></div>
         <div class="clr" style="background:#d44d8a" onclick="fmt('foreColor','#d44d8a')"></div>
-        <div class="clr" style="background:#ff85b8" onclick="fmt('foreColor','#ff85b8')"></div>
-        <div class="clr" style="background:#a03060" onclick="fmt('foreColor','#a03060')"></div>
+        <div class="clr" style="background:#c0407a" onclick="fmt('foreColor','#c0407a')"></div>
+        <div class="clr" style="background:#2563eb" onclick="fmt('foreColor','#2563eb')"></div>
+        <div class="clr" style="background:#16a34a" onclick="fmt('foreColor','#16a34a')"></div>
         <div class="clr" style="background:#e03060" onclick="fmt('foreColor','#e03060')"></div>
-        <div class="clr" style="background:#9a5070" onclick="fmt('foreColor','#9a5070')"></div>
+        <div class="clr" style="background:#9a4060" onclick="fmt('foreColor','#9a4060')"></div>
+        <button class="tbb" onclick="fmt('removeFormat')" style="font-size:0.75rem;padding:5px 8px">✕ مسح كل</button>
       </div>
 
       <div class="warea">
@@ -312,6 +331,24 @@ function changeFontSize(delta){
   localStorage.setItem('mhd_fontsize',fontSize);
 }
 function fmt(cmd,val){document.getElementById('ec').focus();document.execCommand(cmd,false,val||null);onContentChange();}
+function selFontSize(delta){
+  const ec=document.getElementById('ec');
+  ec.focus();
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed){toast('حددي النص أولاً ✨');return;}
+  // get current font size of selection
+  const el=sel.anchorNode.parentElement;
+  const cur=parseFloat(window.getComputedStyle(el).fontSize)||16;
+  const next=Math.min(48,Math.max(9,Math.round(cur)+delta*2));
+  document.execCommand('fontSize',false,'7');
+  // replace font size 7 with actual px size
+  ec.querySelectorAll('font[size="7"]').forEach(f=>{
+    f.removeAttribute('size');
+    f.style.fontSize=next+'px';
+  });
+  onContentChange();
+  toast((delta>0?'⬆️ تكبير ':'⬇️ تصغير ')+next+'px');
+}
 function formatBlock(tag){if(!tag)return;document.getElementById('ec').focus();document.execCommand('formatBlock',false,tag);onContentChange();}
 function insertHR(){document.getElementById('ec').focus();document.execCommand('insertHTML',false,'<hr>');onContentChange();}
 function handleKD(e){if(e.key==='Tab'){e.preventDefault();document.execCommand('insertHTML',false,'&nbsp;&nbsp;&nbsp;&nbsp;');}}
